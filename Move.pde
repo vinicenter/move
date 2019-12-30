@@ -1,36 +1,21 @@
+import processing.opengl.*;
 import processing.sound.*;
 import android.content.Context;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-SoundFile die, hit, lifesound, special, start, highup, bghs, bg, conti;
-
-PFont font, fontArial;
-
-float playerX, playerY;
-
-int life = 1;
-int point = 0;
-int highPoint;
-boolean highScore = false;
-boolean bigPlayer = false;
-
-String sceneSelect = "welcome";
-
-String backgroundMode = "welcome";
-float backgroundR = 65;
-float backgroundG = 48;
-float backgroundB = 129;
-
-boolean touchStarted = false;
+SoundFile die, hit, lifesound, start, highup, bgmhs, bgm, conti;
+PImage earth1, earth2, mars1, mars2, neptune1, neptune2, mercury1, mercury2, jupiter1, jupiter2, meteor, meteorRed, meteorGreen;
+PFont font, fontDefault;
 
 Player player;
 Balls balls;
+Fire fire;
 Score score;
 Menu menu;
 Sky sky;
-Background background;
+Background bg;
 Scene scene;
 Sound sound;
 
@@ -39,35 +24,50 @@ final int targeFPS = 60;
 final long optimalTime = 1000000000 / targeFPS;
 double df;
 
+boolean touchStarted = false;
+
 void setup() {
   orientation(PORTRAIT);
-  size(displayWidth, displayHeight);
+  fullScreen();
   frameRate(60);
   background(0);
   
   font = createFont("fonts/Behtix.ttf", 32);
-  fontArial = createFont("SansSerif", 32);
-
-  lastLoopTime = System.nanoTime();
-  highPoint = loadScore("highscore");
-  
-  scene = new Scene();
-  player =  new Player();
-  balls =  new Balls();
-  score = new Score();
-  menu = new Menu();
-  sky = new Sky();
-  background = new Background();
-  sound = new Sound();
+  fontDefault = createFont("SansSerif", 32);
+    
+  meteor = loadImage("meteor.png");
+  meteorGreen = loadImage("meteor-green.png");
+  meteorRed = loadImage("meteor-red.png");
+  earth1 = loadImage("earth1.png");
+  earth2 = loadImage("earth2.png");
+  mars1 = loadImage("mars1.png");
+  mars2 = loadImage("mars2.png");
+  neptune1 = loadImage("neptune1.png");
+  neptune2 = loadImage("neptune2.png");
+  mercury1 = loadImage("mercury1.png");
+  mercury2 = loadImage("mercury2.png");
+  jupiter1 = loadImage("jupiter1.png");
+  jupiter2 = loadImage("jupiter2.png");
   
   die = new SoundFile(this, "songs/die.wav");
   lifesound = new SoundFile(this, "songs/life.wav");
   start = new SoundFile(this, "songs/start.wav");
   hit = new SoundFile(this, "songs/hit.wav");
-  special = new SoundFile(this, "songs/special.wav");
   conti = new SoundFile(this, "songs/continue.wav");
   highup = new SoundFile(this, "songs/highup.wav");
-  bg = new SoundFile(this, "songs/m2.wav");
+  bgm = new SoundFile(this, "songs/m2.wav");
+  
+  scene = new Scene();
+  player =  new Player();
+  balls =  new Balls();
+  fire = new Fire();
+  score = new Score();
+  menu = new Menu();
+  sky = new Sky();
+  bg = new Background();
+  sound = new Sound();
+  
+  lastLoopTime = System.nanoTime();
 }
 
 void draw() {
@@ -76,22 +76,13 @@ void draw() {
   lastLoopTime = now;
   df = updateTime / (double) optimalTime;
   
-  background(backgroundR, backgroundG, backgroundB);
-  background.update();
- 
-  noStroke();
-  fill(225, 225, 225);
-  textFont(font);
+  background(bg.bgr, bg.bgg, bg.bgb);
+  bg.update();
   
   scene.update();
- 
-  touchStarted = false;
   
-  if(bg.isPlaying()) { 
-  } else {
-    bg.amp(0.5);
-    bg.loop();
-  }
+  if(!bgm.isPlaying()) bgm.loop();
+  touchStarted = false;
 }
 
 void touchStarted() {
@@ -103,5 +94,4 @@ void onStop() {
   sound.stopBg();
   sound.stopStart();
   sound.stopLifesound();
-  sound.stopSpecial();
 }

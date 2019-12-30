@@ -1,115 +1,156 @@
 class Balls {
   float x = random(50, width-50);
   float y = 1;
-  float gravity = 0.1;
-  
-  float dist;
+  float g = 0.1;
   float selectBall = 50;
   
   void gravity() {
-    y += y * gravity * df;
+    y += y * g * df;
   }
   
   void update() {
-    if(bigPlayer == true) {
-      dist = width / 5.3;
-    } else {
-      dist = width / 6.8;
-    }
-    
-    if (y >= playerY) {
-      float d = dist(playerX, playerX, playerX, x);
-      if(d <= dist) {
-        if(point == 10) {
-          gravity = 0.13;
-        } else if (point == 30) {
-          gravity = 0.15;
-        } else if (point == 60) {
-          gravity = 0.16;
-        } else if (point == 100) {
-          gravity = 0.17;
-        }
-        
-        point ++;
+    gravity();
+    if (y >= player.y) if(isHitted(player.x, x, width / 6)) hit(); 
+    nothit();
+  }
+  
+  boolean isHitted(float ax, float bx, float s) {
+    return dist(ax, ax, ax, bx) < s;
+  }
+  
+  void hit() {
+    if(score.point == 10) {
+      g = 0.12;
+      player.planetSelect = "NEPTUNE";
+    } else if (score.point == 30) {
+      g = 0.14;
+      player.planetSelect = "MERCURY";
+    } else if (score.point == 60) {
+      g = 0.15;
+      player.planetSelect = "JUPITER";
+    } else if (score.point == 100) player.planetSelect = "EARTH";
           
-        if(selectBall <= 2) {
-          life ++;
-          sound.stopAll();
-          sound.stopLifesound();
-          sound.stopSpecial();
-          lifesound.amp(0.4);
-          lifesound.cue(0.0);
-          lifesound.play();
-        } else if(selectBall >= 96 && bigPlayer == false) {
-          bigPlayer = true;
-          sound.stopAll();
-          sound.stopSpecial();
-          sound.stopLifesound();
-          special.amp(0.1);
-          special.cue(0.0);
-          special.play();
-        } else if(selectBall > 96 && bigPlayer == true) {
-          sound.stopAll();
-          hit.cue(0.0);
-          hit.play();
-        } else if(selectBall < 96 && selectBall > 2) {
-          sound.stopAll();
-          bg.amp(0.4);
-          hit.cue(0.0);
-          hit.play();
+    if(selectBall <= 2) {
+      //if hitted and meteor is green(life)
+      score.point ++;
+      player.life ++;
+      sound.stopAll();
+      sound.stopLifesound();
+      lifesound.amp(0.4);
+      lifesound.cue(0.0);
+      lifesound.play();
+      selectBall = random(0, 100);
+      x = random(50, width-50);
+      y = random(1, 40);
+    } else if(selectBall >= 96) {
+      //if hitted and meteor is red
+      sound.stopAll();
+      hit.amp(0.4);
+      hit.cue(0.0);
+      hit.play();
+      if(player.life > 1) {
+        //if hitted and meteor is red and life is > 1
+        player.life --;
+        score.point = score.point-10;
+        if(player.planetSelect == "EARTH") {
+          selectBall = 100;
+        } else {
+          selectBall = random(0, 100);
         }
         
-        selectBall = random(0, 100);
         x = random(50, width-50);
-        y = random(0, 40);
+        y = random(1, 40);
+      } else {
+        //if hitted and meteor is red and life is < 1
+        lose();
       }
+    } else if(selectBall < 96 && selectBall > 2) {
+      //if hitted and meteor is gray(normal)
+      score.point ++;
+      sound.stopAll();
+      hit.amp(0.4);
+      hit.cue(0.0);
+      hit.play();
+      if(player.planetSelect == "EARTH") {
+        selectBall = 100;
+      } else {
+        selectBall = random(0, 100);
+      }
+      x = random(50, width-50);
+      y = random(1, 40);
     }
-    if(y >= height && life > 1) {
-      life --;
-      bigPlayer = false;
+  }
+  
+  void nothit() {
+    if(y >= height && selectBall >= 96) {
+      //if not hitted and meteor is red
+      if(player.planetSelect == "EARTH") {
+        sound.stopAll();
+        hit.amp(0.4);
+        hit.cue(0.0);
+        hit.play();
+        selectBall = 100;
+      } else {
+        selectBall = random(0, 100);
+      }
+      score.point ++;
+        
+      x = random(50, width-50);
+      y = random(1, 40);
+    } else if(y >= height && player.life > 1) {
+      //if not hitted and life is > 1
+      player.life --;
       selectBall = random(0, 100);
         
       x = random(50, width-50);
-      y = random(0, 40);
+      y = random(1, 40);
     } else if(y >= height) {
-      sound.stopAll();
-        
-      if(highScore == true) {
-        highup.amp(1.0);
-        highup.cue(0.0);
-        highup.play();
-        backgroundMode = "highscore";
-        background.change();
-      } else {
-        die.amp(1.0);
-        die.cue(0.0);
-        die.play();
-        backgroundMode = "death";
-        background.change();
-      }
-      sceneSelect = "death";
-        
-      selectBall = 50;
-      life = 1;
-      bigPlayer = false;
-      
-      gravity = 0.1;
-      y = 1;
-      x = random(50, width-50);
+      //if not hitted and life is < 1
+      lose();
     }
+  }
+  
+  void lose() {
+    sound.stopAll();
+    if(score.highScore == true) {
+      highup.amp(1.0);
+      highup.cue(0.0);
+      highup.play();
+      scene.select = "HIGHSCORE";
+    } else {
+      die.amp(1.0);
+      die.cue(0.0);
+      die.play();
+      scene.select = "DEATH";
+    }
+    bg.change();
+    player.planetSelect = "MARS";
+        
+    selectBall = 50;
+    player.life = 1;
+      
+    g = 0.1;
+    y = 1;
+    x = random(50, width-50);
   }
   
   void show() {
     if(selectBall <= 2) {
+      for(int i=0; i<4; i++) fire.create();
+      fire.show(); 
       fill(0, 225, 0);
-      ellipse(x, y, width / 19.636363636, width / 19.636363636);
+      image(meteorGreen, x, y, width / 14, width / 14);
       fill(225, 225, 225);
-    } else if(selectBall >= 96 && bigPlayer == false) {
+    } else if(selectBall >= 96) {
+      for(int i=0; i<4; i++) fire.create();
+      fire.show(); 
       fill(200, 13, 13);
-      ellipse(x, y, width / 19.636363636, width / 19.636363636);
+      image(meteorRed, x, y, width / 14, width / 14);
       fill(225, 225, 225);
     } else {
-      ellipse(x, y, width / 19.636363636, width / 19.636363636);
+      for(int i=0; i<4; i++) fire.create();
+      fire.show(); 
+      image(meteor, x, y, width / 14, width / 14);
     }
   }
 }

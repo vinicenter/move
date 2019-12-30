@@ -1,18 +1,15 @@
 class Scene {
+  String select = "WELCOME";
   void update() {
-    if(sceneSelect == "welcome") {
+    if(select == "WELCOME") {
       menu.welcome(); 
-    } else if(sceneSelect == "death") {
+    } else if(select == "DEATH" || select == "HIGHSCORE") {
       menu.death();
-    } else if(sceneSelect == "game") {
+    } else if(select == "GAME") {
+      menu.game();
       score.update();
-      score.show();
-  
-      balls.gravity();
       balls.update();
       balls.show();
-    
-      player.touch();
       player.show();
     }
   }

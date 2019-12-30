@@ -28,75 +28,76 @@ class Sky {
 }
 
 class Background {
-  float backgroundSpeed = 1.25;
+  float bgr, bgg, bgb;
+  float bs = 1.25;
   
   void change() {
-    backgroundR = 2;
-    backgroundG = 2;
-    backgroundB = 2;
+    bgr = 2;
+    bgg = 2;
+    bgb = 2;
   }
   
   void update() {
-    if(backgroundMode == "welcome") {
-      if (backgroundR < 65) {
-        backgroundR = backgroundR*backgroundSpeed;
-        backgroundR ++;
+    if(scene.select == "WELCOME") {
+      if (bgr < 50) {
+        bgr = bgr*bs;
+        bgr ++;
       }
       
-      if (backgroundG < 48) {
-        backgroundG = backgroundG*backgroundSpeed;
-        backgroundG ++;
+      if (bgg < 50) {
+        bgg = bgg*bs;
+        bgg ++;
       }
       
-      if (backgroundB < 129) {
-        backgroundB = backgroundB*backgroundSpeed;
-        backgroundB ++;
+      if (bgb < 60) {
+        bgb = bgb*bs;
+        bgb ++;
       }    
-    } else if(backgroundMode == "game") {
+    } else if(scene.select == "GAME") {
       sky.show();
-      if (backgroundR < 31) {
-        backgroundR = backgroundR*backgroundSpeed;
-        backgroundR ++;
+      if (bgr < 30) {
+        bgr = bgr*bs;
+        bgr ++;
       }
       
-      if (backgroundG < 45) {
-        backgroundG = backgroundG*backgroundSpeed;
-        backgroundG ++;
+      if (bgg < 30) {
+        bgg = bgg*bs;
+        bgg ++;
       }
       
-      if (backgroundB < 72) {
-        backgroundB = backgroundB*backgroundSpeed;
-        backgroundB ++;
+      if (bgb < 30) {
+        bgb = bgb*bs;
+        bgb ++;
       }
-    } else if(backgroundMode == "death") {
-      if (backgroundR < 91) {
-        backgroundR = backgroundR*backgroundSpeed;
-        backgroundR ++;
-      }
-      
-      if (backgroundG < 13) {
-        backgroundG = backgroundG*backgroundSpeed;
-        backgroundG ++;
+    } else if(scene.select == "DEATH") {
+      if (bgr < 80) {
+        bgr = bgr*bs;
+        bgr ++;
       }
       
-      if (backgroundB < 13) {
-        backgroundB = backgroundB*backgroundSpeed;
-        backgroundB ++;
-      }
-    } else if(backgroundMode == "highscore") {
-      if (backgroundR < 8) {
-        backgroundR = backgroundR*backgroundSpeed;
-        backgroundR ++;
+      if (bgg < 30) {
+        bgg = bgg*bs;
+        bgg ++;
       }
       
-      if (backgroundG < 80) {
-        backgroundG = backgroundG*backgroundSpeed;
-        backgroundG ++;
+      if (bgb < 30) {
+        bgb = bgb*bs;
+        bgb ++;
+      }
+    } else if(scene.select == "HIGHSCORE") {
+      if (bgr < 50) {
+        bgr = bgr*bs;
+        bgr ++;
       }
       
-      if (backgroundB < 10) {
-        backgroundB = backgroundB*backgroundSpeed;
-        backgroundB ++;
+      if (bgg < 90) {
+        bgg = bgg*bs;
+        bgg ++;
+      }
+      
+      if (bgb < 40) {
+        bgb = bgb*bs;
+        bgb ++;
       }
     }
   }
