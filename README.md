@@ -3,6 +3,7 @@ A simple android game made with Processing and the Android mode.
 
 ## Objective
 You need to take the meteors, and run from the red ones.
+
 While you are getting some points, you will became some planets, when you get 100 points, you will became earth, so you will need to run from every meteor.<br><br>
 ![alt text](https://raw.githubusercontent.com/viniciuseb/Move/master/Move.gif)
 
