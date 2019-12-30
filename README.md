@@ -10,7 +10,7 @@ While you are getting some points, you will became some planets, when you get 10
 ## How to run the project?
 You can just download the [Move.apk](https://github.com/viniciuseb/Move/raw/master/Move.apk) file from the repo and install it on you android device.
 
-Or you can build the project, just installing the Processing IDE, the Android mode and the Sound library.
+Or if you want to build the project, just install the Processing IDE, the Android mode and the Sound library.
 
 Here is the Processing IDE download link: [Processing IDE Download](https://processing.org/download/)<br>
 Here is a tutorial about how to install the Android mode on your Processing IDE: [Android mode tutorial](https://android.processing.org/install.html)<br>
